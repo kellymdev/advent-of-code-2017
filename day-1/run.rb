@@ -6,3 +6,8 @@ captcha = "318131743492359721598118697551663438829583764742784376816324952224992
 sum_digits = SumDigits.new(captcha)
 sum_digits.sum_digits
 sum_digits.print_total
+
+# Part 2
+circular = SumDigits.new(captcha)
+circular.circular_sum_digits
+circular.print_total

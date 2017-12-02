@@ -15,18 +15,32 @@ class SumDigits
     end
   end
 
+  def circular_sum_digits
+    captcha.chars.each.with_index do |char, index|
+      increment_total(char) if matching_digits?(char, char_to_compare(index))
+    end
+  end
+
   def print_total
     puts "Sum total: #{total}"
   end
 
   private
 
+  def char_to_compare(index)
+    captcha.chars[(index + number_of_steps_forward) % captcha_length]
+  end
+
+  def number_of_steps_forward
+    captcha_length / 2
+  end
+
   def last_digit_matches?(index, char)
     last_digit?(index) && matching_digits?(char, captcha.chars[0])
   end
 
   def last_digit?(index_value)
-    index_value + 1 == captcha.length
+    index_value + 1 == captcha_length
   end
 
   def captcha_length
