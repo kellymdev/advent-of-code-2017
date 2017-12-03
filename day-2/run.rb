@@ -23,3 +23,8 @@ EOF
 calculator = CalculateChecksum.new(spreadsheet)
 calculator.calculate_checksum
 calculator.print_checksum
+
+# Part 2
+divisible_values = CalculateChecksum.new(spreadsheet)
+divisible_values.calculate_divisible_checksum
+divisible_values.print_checksum

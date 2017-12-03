@@ -15,11 +15,33 @@ class CalculateChecksum
     end
   end
 
+  def calculate_divisible_checksum
+    formatted_spreadsheet.each do |row|
+      formatted_row = format_row(row)
+      result = find_divisible_result(formatted_row)
+      increment_checksum(result)
+    end
+  end
+
   def print_checksum
     puts checksum
   end
 
   private
+
+  def find_divisible_result(formatted_row)
+    formatted_row.reverse_each do |num|
+      formatted_row.each do |pair|
+        next if num == pair
+        next unless divides_evenly?(num, pair)
+        return num / pair
+      end
+    end
+  end
+
+  def divides_evenly?(num1, num2)
+    num1 % num2 == 0
+  end
 
   def increment_checksum(num)
     @checksum += num
