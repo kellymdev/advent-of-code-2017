@@ -13,11 +13,24 @@ class ValidatePassphrase
     end
   end
 
+  def count_secure_passphrases
+    passphrase_list.each do |passphrase|
+      formatted = format_passphrase(passphrase)
+      increment_count if valid_passphrase?(formatted)
+    end
+  end
+
   def print_count
     puts count
   end
 
   private
+
+  def format_passphrase(passphrase)
+    passphrase.split(' ').map do |word|
+      word.chars.sort!.join
+    end.join(' ')
+  end
 
   def increment_count
     @count += 1

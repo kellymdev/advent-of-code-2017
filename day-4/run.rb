@@ -519,3 +519,8 @@ EOF
 passphrase = ValidatePassphrase.new(list)
 passphrase.count_valid_passphrases
 passphrase.print_count
+
+# Part 2
+secure_passphrase = ValidatePassphrase.new(list)
+secure_passphrase.count_secure_passphrases
+secure_passphrase.print_count
