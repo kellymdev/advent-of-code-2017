@@ -1104,3 +1104,8 @@ EOF
 jump = JumpInstruction.new(input)
 jump.calculate_jumps
 jump.print_steps
+
+# Part 2
+strange_jump = JumpInstruction.new(input)
+strange_jump.calculate_stranger_jumps
+strange_jump.print_steps

@@ -14,10 +14,11 @@ class JumpInstruction
     end
   end
 
-  def perform_jump(instruction)
-    @instructions[current_location] += 1
-    @current_location += instruction
-    increment_steps
+  def calculate_stranger_jumps
+    while current_location < instructions.length
+      instruction = instructions[current_location]
+      perform_jump(instruction, strange_jump: true)
+    end
   end
 
   def print_steps
@@ -25,6 +26,17 @@ class JumpInstruction
   end
 
   private
+
+  def perform_jump(instruction, strange_jump: false)
+    if strange_jump && instruction >= 3
+      @instructions[current_location] -= 1
+    else
+      @instructions[current_location] += 1
+    end
+
+    @current_location += instruction
+    increment_steps
+  end
 
   def increment_steps
     @steps += 1
