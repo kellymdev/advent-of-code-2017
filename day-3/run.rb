@@ -1,6 +1,6 @@
 require_relative 'memory'
 
-cell = '23'
+cell = '325489'
 
 # Part 1
 memory = Memory.new(cell)

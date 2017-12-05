@@ -47,14 +47,76 @@ class Memory
 
   def find_cell_coordinates(bottom_corner)
     values = values_per_side(bottom_corner)
+    corners = find_corners(values, bottom_corner)
+
+    if (corners[:bottom_corner_value] + values - 1) > cell
+      find_first_side(values, bottom_corner, corners[:top_right_corner_value])
+    elsif (corners[:bottom_corner_value] + values * 2 - 1) > cell
+      find_second_side(values, bottom_corner, corners[:top_right_corner_value])
+    elsif (corners[:bottom_corner_value] + values * 3 - 2) > cell
+      find_third_side(values, bottom_corner, corners[:top_left_corner_value])
+    else
+      find_fourth_side(values, bottom_corner, corners[:bottom_left_corner_value])
+    end
+  end
+
+  def find_first_side(values, bottom_corner, top_right_corner)
+    mid_row = top_right_corner - (values - 1) / 2
+    row = if cell > mid_row
+            cell - mid_row
+          else
+            mid_row - cell
+          end
+
+    { row: row, column: bottom_corner + 1 }
+  end
+
+  def find_second_side(values, bottom_corner, top_right_corner)
+    mid_column = top_right_corner + values / 2
+    column = if cell > mid_column
+               -(cell - mid_column)
+             else
+               mid_column - cell
+             end
+
+    { row: bottom_corner + 1, column: column }
+  end
+
+  def find_third_side(values, bottom_corner, top_left_corner)
+    mid_row = top_left_corner + values / 2
+    row = if cell > mid_row
+            mid_row - cell
+          else
+            cell - mid_row
+          end
+
+    { row: row, column: -bottom_corner + 1 }
+  end
+
+  def find_fourth_side(values, bottom_corner, bottom_left_corner)
+    mid_column = bottom_left_corner + values / 2
+    column = if cell > mid_column
+               cell - mid_column
+             else
+               -(mid_column - cell)
+             end
+
+    { row: -bottom_corner - 1, column: column }
+  end
+
+  def find_corners(side_values, bottom_corner)
     bottom_corner_square = bottom_corner * 2 + 1
     bottom_corner_value = bottom_corner_square * bottom_corner_square
+    top_right_corner_value = bottom_corner_value + side_values - 1
+    top_left_corner_value = top_right_corner_value + side_values - 1
+    bottom_left_corner_value = top_left_corner_value + side_values - 1
 
-    if (bottom_corner_value + values - 1) > cell # cell is in the first side
-      { row: -bottom_corner + cell - bottom_corner_value - 1, column: bottom_corner + 1 }
-    elsif (bottom_corner_value + values * 2 - 1) > cell # cell is in the second side
-      { row: -bottom_corner + values - 1, column: cell - bottom_corner_value + values - 1 }
-    end
+    {
+      bottom_corner_value: bottom_corner_value,
+      top_right_corner_value: top_right_corner_value,
+      top_left_corner_value: top_left_corner_value,
+      bottom_left_corner_value: bottom_left_corner_value
+    }
   end
 
   def values_per_side(num)
