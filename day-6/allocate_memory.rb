@@ -8,8 +8,20 @@ class AllocateMemory
   end
 
   def distribute_memory
-    while configurations.none? { |configuration| configuration == memory_bank.join(' ') }
-      configurations << memory_bank.join(' ')
+    while configurations.none? { |configuration| configuration == memory_bank_string }
+      configurations << memory_bank_string
+      highest = find_highest_memory_bank
+      allocate_memory(highest)
+      increment_cycles
+    end
+  end
+
+  def loop_twice
+    distribute_memory
+    reset_configurations_and_cycles
+
+    while configurations.none? { |configuration| configuration == memory_bank_string }
+      configurations << memory_bank_string
       highest = find_highest_memory_bank
       allocate_memory(highest)
       increment_cycles
@@ -22,13 +34,18 @@ class AllocateMemory
 
   private
 
+  def reset_configurations_and_cycles
+    @configurations = []
+    @cycles = 0
+  end
+
   def allocate_memory(highest)
     @memory_bank[highest[:index]] = 0
     memory = highest[:value]
     current_index = highest[:index]
 
     while memory > 0
-      current_index == 15 ? current_index = 0 : current_index += 1
+      current_index == memory_bank.length - 1 ? current_index = 0 : current_index += 1
       @memory_bank[current_index] += 1
       memory -= 1
     end
@@ -43,6 +60,10 @@ class AllocateMemory
 
   def format_memory_bank(input)
     input.split(' ').map(&:to_i)
+  end
+
+  def memory_bank_string
+    memory_bank.join(' ')
   end
 
   def increment_cycles
