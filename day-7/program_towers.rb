@@ -8,11 +8,65 @@ class ProgramTowers
   def find_bottom_tower
     tower_list.each do |tower, _|
       next unless bottom_tower?(tower)
-      print_bottom_tower(tower)
+      return tower
     end
   end
 
+  def find_unbalanced_tower
+    bottom_tower = find_bottom_tower
+    bottom_discs = tower_list[bottom_tower][:discs]
+
+    bottom_discs.each do |disc_name|
+      disc = tower_list[disc_name]
+      calculate_disc_weight(disc)
+    end
+
+    find_unbalanced_disc(bottom_discs)
+  end
+
+  def print_unbalanced_disc(disc)
+    puts "The unbalanced disc is #{disc.name}. The difference is #{weight_difference}."
+  end
+
+  def print_bottom_tower(tower)
+    puts "The bottom tower is #{tower}"
+  end
+
   private
+
+  def calculate_disc_weight(disc)
+    disc_list = disc[:discs]
+
+    discs_weight = disc_list.map do |top_disc|
+      tower_list[top_disc][:weight]
+    end.reduce(:+)
+
+    disc[:total_weight] = disc[:weight] + discs_weight
+  end
+
+  def find_unbalanced_disc(bottom_discs)
+    frequencies = find_weight_frequencies(bottom_discs)
+    unbalanced_weight = frequencies.key(1)
+    unbalanced_disc = tower_list.select do |_, details|
+      details[:total_weight] == unbalanced_weight
+    end
+    difference = (frequencies.keys - [unbalanced_weight]) - unbalanced_weight
+
+    {
+      name: unbalanced_disc.key,
+      weight_difference: difference
+    }
+  end
+
+  def find_weight_frequencies(bottom_discs)
+    frequencies = {}
+    bottom_discs.each do |disc_name|
+      weight = tower_list[disc_name][:weight]
+      frequencies.key?(weight) ? frequencies[weight] += 1 : frequencies[weight] = 1
+    end
+
+    frequencies
+  end
 
   def bottom_tower?(tower)
     tower_list.each do |disc, details|
@@ -24,20 +78,23 @@ class ProgramTowers
     true
   end
 
-  def print_bottom_tower(tower)
-    puts "The bottom tower is #{tower}"
-  end
-
   def format_tower(tower)
     name_and_weight, disc_list = tower.split(' -> ')
     name, weight = name_and_weight.split(' ')
     discs = disc_list.split(', ') if disc_list
+    formatted_weight = format_weight(weight)
     {
       name => {
-        weight: weight,
+        weight: formatted_weight,
         discs: discs
       }
     }
+  end
+
+  def format_weight(weight)
+    weight.gsub!(/\(/, '')
+    weight.gsub!(/\)/, '')
+    weight.to_i
   end
 
   def format_tower_list(tower_list)
