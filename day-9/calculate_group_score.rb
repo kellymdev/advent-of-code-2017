@@ -1,9 +1,10 @@
 class CalculateGroupScore
-  attr_accessor :groups, :score
+  attr_accessor :groups, :score, :garbage_count
 
   def initialize(list)
     @groups = list.strip
     @score = 0
+    @garbage_count = 0
   end
 
   def calculate_score
@@ -12,6 +13,10 @@ class CalculateGroupScore
 
   def print_score
     puts "The group score is: #{score}"
+  end
+
+  def print_garbage_count
+    puts "The garbage count is: #{garbage_count}"
   end
 
   private
@@ -27,6 +32,8 @@ class CalculateGroupScore
         next
       end
 
+      increment_garbage_count if in_garbage
+
       if group_start?(char) && !in_garbage
         opening_braces += 1
       elsif group_end?(char) && !in_garbage
@@ -36,10 +43,20 @@ class CalculateGroupScore
         in_garbage = true
       elsif cancel_character?(char)
         cancel_char = true
+        decrement_garbage_count if in_garbage
       elsif garbage_end?(char)
         in_garbage = false
+        decrement_garbage_count
       end
     end
+  end
+
+  def increment_garbage_count
+    @garbage_count += 1
+  end
+
+  def decrement_garbage_count
+    @garbage_count -= 1
   end
 
   def group_start?(char)

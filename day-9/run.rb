@@ -8,3 +8,6 @@ EOF
 score = CalculateGroupScore.new(input)
 score.calculate_score
 score.print_score
+
+# Part 2
+score.print_garbage_count
