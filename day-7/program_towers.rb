@@ -1,5 +1,5 @@
 class ProgramTowers
-  attr_reader :tower_list
+  attr_accessor :tower_list
 
   def initialize(tower_list)
     @tower_list = format_tower_list(tower_list)
@@ -18,14 +18,17 @@ class ProgramTowers
 
     bottom_discs.each do |disc_name|
       disc = tower_list[disc_name]
-      calculate_disc_weight(disc)
+      weight = calculate_disc_weight(disc)
+      disc[:total_weight] = weight
     end
 
     find_unbalanced_disc(bottom_discs)
   end
 
   def print_unbalanced_disc(disc)
-    puts "The unbalanced disc is #{disc.name}. The difference is #{weight_difference}."
+    weight = tower_list[disc[:name]][:weight] + disc[:weight_difference]
+
+    puts "The unbalanced disc is #{disc[:name]}. The difference is #{disc[:weight_difference]}. It's weight would need to be #{weight}"
   end
 
   def print_bottom_tower(tower)
@@ -41,7 +44,7 @@ class ProgramTowers
       tower_list[top_disc][:weight]
     end.reduce(:+)
 
-    disc[:total_weight] = disc[:weight] + discs_weight
+    disc[:weight] + discs_weight
   end
 
   def find_unbalanced_disc(bottom_discs)
@@ -50,10 +53,10 @@ class ProgramTowers
     unbalanced_disc = tower_list.select do |_, details|
       details[:total_weight] == unbalanced_weight
     end
-    difference = (frequencies.keys - [unbalanced_weight]) - unbalanced_weight
+    difference = (frequencies.keys.uniq - [unbalanced_weight]).join.to_i - unbalanced_weight
 
     {
-      name: unbalanced_disc.key,
+      name: unbalanced_disc.keys.first,
       weight_difference: difference
     }
   end
@@ -61,7 +64,7 @@ class ProgramTowers
   def find_weight_frequencies(bottom_discs)
     frequencies = {}
     bottom_discs.each do |disc_name|
-      weight = tower_list[disc_name][:weight]
+      weight = tower_list[disc_name][:total_weight]
       frequencies.key?(weight) ? frequencies[weight] += 1 : frequencies[weight] = 1
     end
 
