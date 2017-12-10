@@ -1,9 +1,10 @@
 class RegisterInstructionList
   attr_reader :list
-  attr_accessor :registers
+  attr_accessor :registers, :highest_value
 
   def initialize(list)
     @list = format_list(list)
+    @highest_value = 0
   end
 
   def process_register_instructions
@@ -17,6 +18,10 @@ class RegisterInstructionList
   def print_largest_register_value
     max_value = registers.values.max
     puts "The largest register value is: #{max_value}"
+  end
+
+  def print_highest_value
+    puts "The highest value was: #{highest_value}"
   end
 
   private
@@ -34,6 +39,14 @@ class RegisterInstructionList
     when 'dec'
       registers[formatted_instruction[:register]] -= formatted_instruction[:value]
     end
+
+    update_highest_value(registers[formatted_instruction[:register]])
+  end
+
+  def update_highest_value(register_value)
+    return unless register_value > highest_value
+
+    @highest_value = register_value
   end
 
   def execute_instruction?(formatted_instruction)

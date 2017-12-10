@@ -1007,3 +1007,6 @@ EOF
 list = RegisterInstructionList.new(input)
 list.process_register_instructions
 list.print_largest_register_value
+
+# Part 2
+list.print_highest_value
