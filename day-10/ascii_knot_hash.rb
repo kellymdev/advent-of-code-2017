@@ -110,14 +110,12 @@ class AsciiKnotHash
   end
 
   def format_lengths(length_list)
-    length_list.chars.map(&:ord)
+    length_list.chars.map(&:ord) + [17, 31, 73, 47, 23]
   end
 
   def create_list
-    ascii = (0..LIST_SIZE).map.with_index do |_, index|
+    (0..LIST_SIZE).map.with_index do |_, index|
       index
     end
-
-    ascii + [17, 31, 73, 47, 23]
   end
 end
