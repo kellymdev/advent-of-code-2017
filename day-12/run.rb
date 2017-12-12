@@ -2005,5 +2005,10 @@ EOF
 
 # Part 1
 pipes = ConnectPipes.new(input)
-count = pipes.find_group_for('0')
-pipes.print_program_count(count)
+group = pipes.find_group_for('0')
+pipes.print_program_count(group)
+
+# Part 2
+groups = ConnectPipes.new(input)
+group_count = groups.find_group_count
+groups.print_group_count(group_count)

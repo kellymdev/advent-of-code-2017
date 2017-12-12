@@ -19,11 +19,29 @@ class ConnectPipes
       links_to_check += new_links
     end
 
-    group.uniq.size
+    group.uniq
   end
 
-  def print_program_count(count)
-    puts "#{count} programs in group"
+  def find_group_count
+    programs_not_in_group = connections.keys
+    groups = []
+
+    until programs_not_in_group.empty?
+      program = programs_not_in_group.shift
+      group = find_group_for(program)
+      programs_not_in_group.reject! { |prog| group.include?(prog) }
+      groups << group
+    end
+
+    groups.count
+  end
+
+  def print_program_count(group)
+    puts "#{group.size} programs in group"
+  end
+
+  def print_group_count(count)
+    puts "#{count} groups"
   end
 
   private
