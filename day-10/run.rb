@@ -11,4 +11,5 @@ knot_hash.multiply_first_two_numbers
 
 # Part 2
 ascii_hash = AsciiKnotHash.new(input)
-ascii_hash.create_hash
+new_hash = ascii_hash.create_hash
+ascii_hash.print_hash(new_hash)

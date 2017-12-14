@@ -15,14 +15,18 @@ class AsciiKnotHash
     64.times { hash_list }
 
     dense_hash = create_dense_hash
-    hex = convert_to_hexadecimal(dense_hash)
-    puts "Hash is: #{hex}"
+    convert_to_hexadecimal(dense_hash)
+  end
+
+  def print_hash(hash)
+    puts "Hash is: #{hash}"
   end
 
   private
 
   def create_dense_hash
     sixteens = group_by_sixteen
+    require 'byebug'; byebug
 
     sixteens.map do |sixteen|
       create_xor(sixteen)
