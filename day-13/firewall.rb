@@ -19,11 +19,40 @@ class Firewall
     severity
   end
 
+  def find_safe_path
+    scan_sequences = find_scan_sequences
+    (0..firewall_size).each do |second|
+      scan_sequences_for_second = scan_sequences.transpose[second]
+
+      next unless safe_path?(scan_sequences_for_second)
+
+      return second
+    end
+  end
+
   def print_severity(severity)
     puts "Severity of #{severity}"
   end
 
+  def print_delay(delay)
+    puts "Delay the trip by #{delay} picoseconds"
+  end
+
   private
+
+  def safe_path?(scan_sequences_for_second)
+    !scan_sequences_for_second.include?(0)
+  end
+
+  def find_scan_sequences
+    scanners.map do |_, depth|
+      length = firewall_size * 3
+
+      sequence = scanner_sequence(depth)
+      sequence += sequence until sequence.size > length
+      sequence[0..length]
+    end
+  end
 
   def calculate_severity_of_scan(layer)
     scanner_depth = scanners[layer]
