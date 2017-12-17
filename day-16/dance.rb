@@ -16,7 +16,7 @@ class Dance
   def perform_whole_dance
     sequences = find_repeating_sequence
     index = find_sequence_index(sequences)
-    @program_order = sequences[index - 1].chars
+    @program_order = sequences[index].chars
   end
 
   def print_program_order
