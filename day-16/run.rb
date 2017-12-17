@@ -6,3 +6,8 @@ input = 'pa/c,x7/9,s5,x15/8,pn/j,x0/12,pm/e,x13/15,s12,x4/3,pl/i,x8/10,s15,pe/a,
 dance = Dance.new(input)
 dance.dance
 dance.print_program_order
+
+# Part 2
+billions_dance = Dance.new(input)
+billions_dance.perform_whole_dance
+billions_dance.print_program_order

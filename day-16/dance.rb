@@ -13,11 +13,32 @@ class Dance
     end
   end
 
+  def perform_whole_dance
+    sequences = find_repeating_sequence
+    index = find_sequence_index(sequences)
+    @program_order = sequences[index - 1].chars
+  end
+
   def print_program_order
     puts "#{program_order.join}"
   end
 
   private
+
+  def find_sequence_index(sequences)
+    1_000_000_000 % sequences.size
+  end
+
+  def find_repeating_sequence
+    sequences = []
+
+    until sequences.include?(program_order.join)
+      sequences << program_order.join
+      dance
+    end
+
+    sequences
+  end
 
   def perform_move(move)
     move_type = move[0]
