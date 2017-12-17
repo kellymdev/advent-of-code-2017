@@ -10,17 +10,32 @@ class Spinlock
 
   def create_circular_buffer
     2017.times do |current_value|
-      increment_current_position
-      @buffer.insert(current_position, current_value + 1)
+      cycle_circular_buffer(current_value)
     end
   end
 
-  def print_value_after_2017
-    index_of_2017 = buffer.index(2017)
-    puts "Value is: #{buffer[index_of_2017 + 1]}"
+  def create_fast_circular_buffer
+    50_000_000.times do |current_value|
+      print_value(current_value)
+      cycle_circular_buffer(current_value)
+    end
+  end
+
+  def print_value_after(num)
+    index_of_num = buffer.index(num)
+    print_value(buffer[index_of_num + 1])
   end
 
   private
+
+  def print_value(value)
+    puts "Value is: #{value}"
+  end
+
+  def cycle_circular_buffer(current_value)
+    increment_current_position
+    @buffer.insert(current_position, current_value + 1)
+  end
 
   def increment_current_position
     @current_position += step_count
