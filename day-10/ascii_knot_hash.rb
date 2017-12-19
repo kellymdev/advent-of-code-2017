@@ -26,7 +26,6 @@ class AsciiKnotHash
 
   def create_dense_hash
     sixteens = group_by_sixteen
-    require 'byebug'; byebug
 
     sixteens.map do |sixteen|
       create_xor(sixteen)
@@ -34,7 +33,8 @@ class AsciiKnotHash
   end
 
   def convert_to_hexadecimal(dense_hash)
-    dense_hash.pack('C*').unpack('H*')[0]
+    # dense_hash.pack('C*').unpack('H*')[0]
+    dense_hash.hex
   end
 
   def create_xor(sixteens)
@@ -102,7 +102,9 @@ class AsciiKnotHash
   def increment_current_position(length)
     @current_position += (length + skip_size)
 
-    decrement_current_position if current_position > LIST_SIZE
+    while current_position > LIST_SIZE
+      decrement_current_position
+    end
   end
 
   def decrement_current_position
