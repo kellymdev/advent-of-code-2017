@@ -29,12 +29,13 @@ class AsciiKnotHash
 
     sixteens.map do |sixteen|
       create_xor(sixteen)
-    end.join
+    end
   end
 
   def convert_to_hexadecimal(dense_hash)
-    # dense_hash.pack('C*').unpack('H*')[0]
-    dense_hash.hex
+    dense_hash.map do |num|
+      num.to_s(16)
+    end.join
   end
 
   def create_xor(sixteens)

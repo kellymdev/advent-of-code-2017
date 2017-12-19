@@ -1,8 +1,7 @@
 require_relative 'knot_hash'
 require_relative 'ascii_knot_hash'
 
-# input = '70,66,255,2,48,0,54,48,80,141,244,254,160,108,1,41'
-input = '1,2,3'
+input = '70,66,255,2,48,0,54,48,80,141,244,254,160,108,1,41'
 
 # Part 1
 knot_hash = KnotHash.new(input)
