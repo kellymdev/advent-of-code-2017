@@ -208,3 +208,6 @@ EOF
 diagram = RoutingDiagram.new(input)
 diagram.follow_route
 diagram.print_letter_path
+
+# Part 2
+diagram.print_step_count

@@ -1,6 +1,6 @@
 class RoutingDiagram
   attr_reader :diagram
-  attr_accessor :current_row, :current_column, :current_direction, :letters
+  attr_accessor :current_row, :current_column, :current_direction, :letters, :steps
 
   VERTICAL_LINE = '|'
   HORIZONTAL_LINE = '-'
@@ -19,14 +19,15 @@ class RoutingDiagram
     @current_column = set_initial_column
     @current_direction = DOWN
     @letters = []
+    @steps = 0
   end
 
   def follow_route
     current_square = diagram[current_row][current_column]
 
     while current_square != EMPTY_SQUARE
-      puts current_square
       determine_next_move(current_square)
+      increment_steps
 
       current_square = diagram[current_row][current_column]
     end
@@ -34,6 +35,10 @@ class RoutingDiagram
 
   def print_letter_path
     puts "Letters: #{letters.join}"
+  end
+
+  def print_step_count
+    puts "Steps: #{steps}"
   end
 
   private
@@ -112,6 +117,10 @@ class RoutingDiagram
     elsif current_direction == UP
       decrement_row
     end
+  end
+
+  def increment_steps
+    @steps += 1
   end
 
   def increment_column
