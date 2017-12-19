@@ -83,9 +83,7 @@ class Program
   end
 
   def receive_value(register)
-    until received_values.size > 0
-      sleep(2)
-    end
+    return false unless received_values.size > 0
 
     @registers[register] = received_values.shift
   end
