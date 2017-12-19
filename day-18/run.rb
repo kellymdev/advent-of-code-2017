@@ -1,4 +1,6 @@
 require_relative 'duet'
+require_relative 'send_and_receive'
+require_relative 'program'
 
 input = <<EOF
 set i 31
@@ -47,3 +49,7 @@ EOF
 # Part 1
 duet = Duet.new(input)
 duet.perform_duet
+
+# Part 2
+send_receive = SendAndReceive.new(input)
+send_receive.run_programs
