@@ -83,7 +83,13 @@ class Duet
   end
 
   def jump(register, value)
-    return if registers[register].zero?
+    register_value = if register?(register)
+                       registers[register]
+                     else
+                       register.to_i
+                     end
+
+    return if register_value.zero?
 
     if register?(value)
       @current_instruction += registers[value]
@@ -112,9 +118,14 @@ class Duet
     registers = {}
 
     instructions.each do |instruction|
+      next unless letter?(instruction[4])
       registers[instruction[4]] = 0
     end
 
     registers
+  end
+
+  def letter?(value)
+    value.to_i.zero?
   end
 end
