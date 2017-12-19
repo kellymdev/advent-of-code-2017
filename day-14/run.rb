@@ -1,6 +1,6 @@
 require_relative 'disk_defragmenter'
 
-input = 'flqrgnkx'
+input = 'oundnydw'
 
 # Part 1
 defragmenter = DiskDefragmenter.new(input)
