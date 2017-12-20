@@ -27,10 +27,12 @@ class DiskDefragmenter
     until regions_completed?
       print_region_seed
       square = find_first_used_square
+      set_grid_for_position(square[:row], square[:column], region_seed)
       find_adjacent_squares(square[:row], square[:column])
-      require 'byebug'; byebug
       @region_seed += 1
     end
+
+    print_grid
 
     region_seed - 1
   end
@@ -44,6 +46,20 @@ class DiskDefragmenter
   end
 
   private
+
+  def print_grid
+    grid.each do |row|
+      formatted_row = row.map do |column|
+        if column.is_a?(Fixnum)
+          column.to_s.rjust(4, '0')
+        else
+          column.rjust(4, '.')
+        end
+      end
+
+      puts formatted_row.join(',')
+    end
+  end
 
   def print_region_seed
     puts "Finding squares for region: #{region_seed}"
