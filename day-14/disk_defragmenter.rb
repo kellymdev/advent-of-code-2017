@@ -122,7 +122,7 @@ class DiskDefragmenter
   end
 
   def convert_to_binary(knot_hash)
-    knot_hash.hex.to_s(2).rjust(knot_hash.size * 4, '0')
+    knot_hash.hex.to_s(2).rjust(128, '0')
   end
 
   def create_knot_hash(row)
