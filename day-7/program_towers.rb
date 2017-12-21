@@ -17,6 +17,7 @@ class ProgramTowers
     bottom_discs = tower_list[bottom_tower][:discs]
 
     bottom_discs.each do |disc_name|
+      find_all_discs_for_tower(disc_name)
       disc = tower_list[disc_name]
       weight = calculate_disc_weight(disc)
       disc[:total_weight] = weight
@@ -36,6 +37,19 @@ class ProgramTowers
   end
 
   private
+
+  def find_all_discs_for_tower(tower_name)
+    disc = tower_list[tower_name]
+    discs = disc[:discs]
+
+    if discs
+      new_discs = disc[:discs].map do |disc_name|
+        find_all_discs_for_tower(disc_name)
+      end
+
+      discs + new_discs
+    end
+  end
 
   def calculate_disc_weight(disc)
     disc_list = disc[:discs]
