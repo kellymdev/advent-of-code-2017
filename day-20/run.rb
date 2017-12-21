@@ -1007,3 +1007,8 @@ EOF
 buffer = Buffer.new(input)
 particles = buffer.move_particles
 buffer.print_closest_particle(particles)
+
+# Part 2
+collisons = Buffer.new(input)
+collisons.move_particles_with_collisons
+

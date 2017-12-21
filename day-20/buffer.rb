@@ -20,11 +20,48 @@ class Buffer
     closest_particle = find_particles_with_closest_distance(distance)
   end
 
+  def move_particles_with_collisons
+    ITERATIONS.times do
+      update_particles
+      remove_collisons
+    end
+
+    particles.each do |particle, particle_data|
+      calculate_manhattan_distance(particle, particle_data[:position])
+    end
+
+    print_particle_count
+  end
+
+  def print_particle_count
+    puts "There are #{particles.size} particles left"
+  end
+
   def print_closest_particle(particle_list)
     puts "Closest particle is: #{particle_list.first}"
   end
 
   private
+
+  def remove_collisons
+    particles.each do |particle, particle_data|
+      x = particle_data[:position][:x].last
+      y = particle_data[:position][:y].last
+      z = particle_data[:position][:z].last
+
+      delete_collisons(particle, x, y, z)
+    end
+  end
+
+  def delete_collisons(particle_number, x_value, y_value, z_value)
+    particles.each do |particle, particle_data|
+      next if particle == particle_number
+      next unless particle_data[:position][:x].last == x_value && particle_data[:position][:y].last == y_value && particle_data[:position][:z].last == z_value
+
+      @particles.delete(particle)
+      @particles.delete(particle_number)
+    end
+  end
 
   def find_particles_with_closest_distance(closest_distance)
     particles.map do |particle, particle_data|
