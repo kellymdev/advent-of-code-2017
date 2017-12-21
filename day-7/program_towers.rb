@@ -17,9 +17,9 @@ class ProgramTowers
     bottom_discs = tower_list[bottom_tower][:discs]
 
     bottom_discs.each do |disc_name|
-      find_all_discs_for_tower(disc_name)
+      disc_list = find_all_discs_for_tower(disc_name)
       disc = tower_list[disc_name]
-      weight = calculate_disc_weight(disc)
+      weight = calculate_disc_weight(disc, disc_list)
       disc[:total_weight] = weight
     end
 
@@ -43,17 +43,15 @@ class ProgramTowers
     discs = disc[:discs]
 
     if discs
-      new_discs = disc[:discs].map do |disc_name|
+      new_discs = disc[:discs].flat_map do |disc_name|
         find_all_discs_for_tower(disc_name)
       end
 
-      discs + new_discs
+      (discs + new_discs).compact
     end
   end
 
-  def calculate_disc_weight(disc)
-    disc_list = disc[:discs]
-
+  def calculate_disc_weight(disc, disc_list)
     discs_weight = disc_list.map do |top_disc|
       tower_list[top_disc][:weight]
     end.reduce(:+)
@@ -67,7 +65,7 @@ class ProgramTowers
     unbalanced_disc = tower_list.select do |_, details|
       details[:total_weight] == unbalanced_weight
     end
-    difference = (frequencies.keys.uniq - [unbalanced_weight]).join.to_i - unbalanced_weight
+    difference = (frequencies.keys.uniq - [unbalanced_weight]).first - unbalanced_weight
 
     {
       name: unbalanced_disc.keys.first,
