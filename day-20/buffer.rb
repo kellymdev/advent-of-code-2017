@@ -1,15 +1,53 @@
 class Buffer
   attr_accessor :particles
 
+  ITERATIONS = 1000
+
   def initialize(particle_list)
     @particles = format_particle_list(particle_list)
   end
 
   def move_particles
-    update_particles
+    ITERATIONS.times do
+      update_particles
+    end
+
+    particles.each do |particle, particle_data|
+      calculate_manhattan_distance(particle, particle_data[:position])
+    end
+
+    distance = find_closest_distance
+    closest_particle = find_particles_with_closest_distance(distance)
+  end
+
+  def print_closest_particle(particle_list)
+    puts "Closest particle is: #{particle_list.first}"
   end
 
   private
+
+  def find_particles_with_closest_distance(closest_distance)
+    particles.map do |particle, particle_data|
+      next unless particle_data[:distance] == closest_distance
+      particle
+    end.compact
+  end
+
+  def find_closest_distance
+    distance = particles.map do |particle, particle_data|
+      particle_data[:distance]
+    end.min
+  end
+
+  def calculate_manhattan_distance(particle, position_data)
+    distance = 0
+
+    position_data[:x].each.with_index do |x_value, index|
+      distance += x_value.abs + (position_data[:y][index]).abs + (position_data[:z][index]).abs
+    end
+
+    @particles[particle][:distance] = distance
+  end
 
   def update_particles
     particles.each do |particle, _|
@@ -35,7 +73,7 @@ class Buffer
   end
 
   def update_position(particle, coordinate)
-    @particles[particle][:position][coordinate] += @particles[particle][:velocity][coordinate]
+    @particles[particle][:position][coordinate] << (@particles[particle][:position][coordinate].last + @particles[particle][:velocity][coordinate])
   end
 
   def format_particle_list(particle_list)
@@ -55,14 +93,20 @@ class Buffer
     acceleration = format_particle_data(values[2])
 
     {
-      position: position,
+      position: format_position_data(position),
       velocity: velocity,
       acceleration: acceleration
     }
   end
 
+  def format_position_data(position_data)
+    position_data.each do |coordinate, value|
+      position_data[coordinate] = [value]
+    end
+  end
+
   def format_particle_data(particle_data)
-    x, y, z = particle_data[4..-2].split(',').map(&:to_i)
+    x, y, z = particle_data[3..-2].split(',').map(&:to_i)
 
     {
       x: x,
